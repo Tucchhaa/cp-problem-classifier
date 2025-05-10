@@ -8,6 +8,9 @@ import ast
 
 from utils import get_dataset_filepath, convert_codeforces_labels, convert_leetcode_labels
 
+MAX_PROBLEM_DESCRIPTION_LENGTH = 6000
+MAX_LABELS_COUNT = 7
+
 class Formatter:
     def __init__(self, dataset_name):
         self.dataset_name = dataset_name
@@ -34,12 +37,12 @@ class OpenR1CodeforcesFormatter(Formatter):
     def _format_row(self, row):
         labels = convert_codeforces_labels(row['labels'])
 
-        if len(labels) == 0 or pd.isna(row['description']):
+        if len(labels) == 0 or len(labels) > MAX_LABELS_COUNT:
             return None
 
         description = self._get_description(row)
 
-        if not description:
+        if not description or len(description) > MAX_PROBLEM_DESCRIPTION_LENGTH:
             return None
 
         return pd.Series({
@@ -50,6 +53,9 @@ class OpenR1CodeforcesFormatter(Formatter):
         })
 
     def _get_description(self, row):
+        if pd.isna(row['description']):
+            return None
+
         result = row['description'].replace('\n', ' ')
         fields = ['input_format', 'output_format', 'interaction_format', 'note']
 
@@ -68,10 +74,13 @@ class KaysssLeetcodeFormatter(Formatter):
     def _format_row(self, row):
         labels = convert_leetcode_labels(row['labels'])
 
-        if len(labels) == 0 or pd.isna(row['description']):
+        if len(labels) == 0 or len(labels) > MAX_LABELS_COUNT:
             return None
 
         description = self._get_description(row)
+
+        if not description or len(description) > MAX_PROBLEM_DESCRIPTION_LENGTH:
+            return None
 
         return pd.Series({
             'source': 'leetcode',
@@ -85,6 +94,10 @@ class KaysssLeetcodeFormatter(Formatter):
         # TODO: parse html, and split data to description, input_format, output_format, constraints,
         # TODO: scrap hints from the website
         #
+
+        if pd.isna(row['description']):
+            return None
+
         result = row['description'].replace('\n', ' ')
 
         return result
