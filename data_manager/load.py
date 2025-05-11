@@ -17,7 +17,7 @@ class DatasetLoader:
 
         dataset_df = self._map(dataset_df)
 
-        dataset_filepath = get_dataset_filepath(self.dataset_name)
+        dataset_filepath = get_dataset_filepath(self.dataset_name, source="huggingface")
 
         if os.path.exists(dataset_filepath):
             os.remove(dataset_filepath)

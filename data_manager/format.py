@@ -12,11 +12,12 @@ MAX_PROBLEM_DESCRIPTION_LENGTH = 6000
 MAX_LABELS_COUNT = 7
 
 class Formatter:
-    def __init__(self, dataset_name):
+    def __init__(self, dataset_name, source):
         self.dataset_name = dataset_name
+        self.source = source
 
     def format(self):
-        dataset_filepath = get_dataset_filepath(self.dataset_name)
+        dataset_filepath = get_dataset_filepath(self.dataset_name, self.source)
 
         loaded_df = pd.read_csv(dataset_filepath)
         loaded_df['labels'] = loaded_df['labels'].apply(ast.literal_eval)
@@ -32,7 +33,7 @@ class Formatter:
 
 class OpenR1CodeforcesFormatter(Formatter):
     def __init__(self):
-        super().__init__("open-r1/codeforces")
+        super().__init__("open-r1/codeforces", "huggingface")
 
     def _format_row(self, row):
         labels = convert_codeforces_labels(row['labels'])
@@ -69,7 +70,7 @@ class OpenR1CodeforcesFormatter(Formatter):
 
 class KaysssLeetcodeFormatter(Formatter):
     def __init__(self):
-        super().__init__("kaysss/leetcode-problem-detailed")
+        super().__init__("kaysss/leetcode-problem-detailed", "huggingface")
 
     def _format_row(self, row):
         labels = convert_leetcode_labels(row['labels'])
@@ -101,6 +102,17 @@ class KaysssLeetcodeFormatter(Formatter):
         result = row['description'].replace('\n', ' ')
 
         return result
+
+# TODO:
+class SpojFormatter(Formatter):
+    def __init__(self):
+        super().__init__("kaysss/leetcode-problem-detailed", "scrapper")
+
+    def _format_row(self, row):
+        pass
+
+    def _get_description(self, row):
+        pass
 
 
 codeforcesFormatter = OpenR1CodeforcesFormatter()
