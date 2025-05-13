@@ -5,7 +5,7 @@
 import pandas as pd
 import os
 import ast
-
+from bs4 import BeautifulSoup  
 from utils import get_dataset_filepath, convert_codeforces_labels, convert_leetcode_labels
 
 MAX_PROBLEM_DESCRIPTION_LENGTH = 6000
@@ -91,16 +91,15 @@ class KaysssLeetcodeFormatter(Formatter):
         })
 
     def _get_description(self, row):
-        #
-        # TODO: parse html, and split data to description, input_format, output_format, constraints,
-        # TODO: scrap hints from the website
-        #
-
+        
         if pd.isna(row['description']):
             return None
 
-        result = row['description'].replace('\n', ' ')
-
+        # Use BeautifulSoup to clean HTML tags
+        raw_description = row['description'].replace('\n', ' ')
+        clean_description = BeautifulSoup(raw_description, "html.parser").get_text()
+        # remove extra spaces
+        result = " ".join(clean_description.split())           
         return result
 
 # TODO:
@@ -123,9 +122,11 @@ dataset_df = pd.concat([
     leetcodeFormatter.format()
 ])
 
-dataset_filepath = get_dataset_filepath('problems', source="huggingface")
+dataset_filepath = get_dataset_filepath('problems', 'huggingface','jsonl')
 
 if os.path.exists(dataset_filepath):
     os.remove(dataset_filepath)
 
-dataset_df.to_csv(dataset_filepath, index=False)
+# dataset_df.to_csv(dataset_filepath, index=False)
+dataset_df.to_json(dataset_filepath, orient='records', lines=True)
+

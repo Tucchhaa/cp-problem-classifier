@@ -1,6 +1,19 @@
+
 numpy>=2.1.3
 pandas>=2.2.3
 datasets>=3.5.1
-matplotlib
-beautifulsoup4
+bs4
 requests
+
+# matplotlib
+# scikit-learn
+# joblib
+
+# transformers
+# tokenizers
+# huggingface-hub
+# accelerate
+# # Training support
+# torch
+# tqdm
+# tensorboard

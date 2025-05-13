@@ -5,14 +5,13 @@ from typing import List, Literal
 
 Source = Literal["huggingface", "scrapper", ""]
 
-def get_dataset_filepath(dataset_name: str, source: Source = "") -> str:
-    dest_dir = f"./dataset/{source}/"
-    extension = '.json' if source == 'scrapper' else '.csv'
+def get_dataset_filepath(dataset_name: str, source: Source = "",extension: str='csv') -> str:
+    dest_dir = f"./dataset/{source}"
 
     filename = dataset_name.replace('/', '_')
     os.makedirs(dest_dir, exist_ok=True)
 
-    return f"{dest_dir}{filename}{extension}"
+    return f"{dest_dir}/{filename}.{extension}"
 
 def _convert_labels(labels: List[str], labels_map) -> List[str]:
     converted_labels = []
