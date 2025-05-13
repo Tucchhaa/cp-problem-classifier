@@ -123,7 +123,7 @@ dataset_df = pd.concat([
     leetcodeFormatter.format()
 ])
 
-dataset_filepath = get_dataset_filepath('problems', is_huggingface_dataset=False)
+dataset_filepath = get_dataset_filepath('problems', source="huggingface")
 
 if os.path.exists(dataset_filepath):
     os.remove(dataset_filepath)

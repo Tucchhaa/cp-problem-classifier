@@ -6,7 +6,7 @@ from typing import List, Literal
 Source = Literal["huggingface", "scrapper", ""]
 
 def get_dataset_filepath(dataset_name: str, source: Source = "") -> str:
-    dest_dir = f"./dataset/{source}"
+    dest_dir = f"./dataset/{source}/"
     extension = '.json' if source == 'scrapper' else '.csv'
 
     filename = dataset_name.replace('/', '_')
