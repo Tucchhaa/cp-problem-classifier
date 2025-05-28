@@ -38,7 +38,7 @@ class CodeforcesProblem:
     interaction_format: str
     note: str
     examples: List[Example]
-    tests: [str]
+    tests: List[str]
 
 @dataclass
 class OpenR1CodeforcesProblem:
