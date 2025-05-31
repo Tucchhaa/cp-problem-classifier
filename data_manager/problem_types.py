@@ -38,7 +38,7 @@ class CodeforcesProblem:
     interaction_format: str
     note: str
     examples: List[Example]
-    tests: [str]
+    tests: List[str]
 
 @dataclass
 class OpenR1CodeforcesProblem:
@@ -286,7 +286,7 @@ leetcode_to_standard: Dict[LeetcodeProblemLabel, Optional[List[ProblemLabel]]] =
     "Binary Search": ["binary search"],
     "Database": None,
     "Matrix": ["matrices"],
-    "Tree": ["tree"],
+    "Tree": ["trees"],
     "Breadth-First Search": ["graphs"],
     "Bit Manipulation": ["bit manipulation"],
     "Two Pointers": ["two pointers"],

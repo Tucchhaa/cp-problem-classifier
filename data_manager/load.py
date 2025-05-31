@@ -9,20 +9,20 @@ import numpy as np
 from utils import get_dataset_filepath
 
 class DatasetLoader:
-    def __init__(self, dataset_name):
+    def __init__(self, dataset_name, dataset_filepath):
         self.dataset_name = dataset_name
+        self.dataset_filepath = dataset_filepath
 
-    def download(self):
+    def download(self, force=False):
+        if os.path.exists(self.dataset_filepath):
+            if force:
+                os.remove(self.dataset_filepath)
+            else:
+                return
+
         dataset_df = self._load()
-
         dataset_df = self._map(dataset_df)
-
-        dataset_filepath = get_dataset_filepath(self.dataset_name, source="huggingface")
-
-        if os.path.exists(dataset_filepath):
-            os.remove(dataset_filepath)
-
-        dataset_df.to_csv(dataset_filepath, index=False)
+        dataset_df.to_csv(self.dataset_filepath, index=False)
 
     def _load(self):
         dataset = load_dataset(self.dataset_name)
@@ -51,7 +51,10 @@ class DatasetLoader:
 
 class OpenR1CodeforcesLoader(DatasetLoader):
     def __init__(self):
-        super().__init__("open-r1/codeforces")
+        super().__init__(
+            "open-r1/codeforces",
+            get_dataset_filepath("huggingface/open-r1_codeforces.csv")
+        )
 
     def _load(self):
         df = super()._load()
@@ -79,7 +82,10 @@ class OpenR1CodeforcesLoader(DatasetLoader):
 
 class KaysssLeetcodeLoader(DatasetLoader):
     def __init__(self):
-        super().__init__("kaysss/leetcode-problem-detailed")
+        super().__init__(
+            "kaysss/leetcode-problem-detailed",
+            get_dataset_filepath("huggingface/kaysss_leetcode-problem-detailed.csv")
+        )
 
     def _map_row(self, row):
         return pd.Series({
@@ -90,10 +96,3 @@ class KaysssLeetcodeLoader(DatasetLoader):
             'difficulty': row['difficulty'],
             'description': row['content']
         })
-
-
-codeforcesDataset = OpenR1CodeforcesLoader()
-leetcodeDataset = KaysssLeetcodeLoader()
-
-codeforcesDataset.download()
-leetcodeDataset.download()

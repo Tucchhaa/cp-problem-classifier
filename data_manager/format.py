@@ -3,7 +3,6 @@
 #
 
 import pandas as pd
-import os
 import ast
 
 from utils import get_dataset_filepath, convert_codeforces_labels, convert_leetcode_labels
@@ -12,14 +11,11 @@ MAX_PROBLEM_DESCRIPTION_LENGTH = 6000
 MAX_LABELS_COUNT = 7
 
 class Formatter:
-    def __init__(self, dataset_name, source):
-        self.dataset_name = dataset_name
-        self.source = source
+    def __init__(self, dataset_filepath):
+        self.dataset_filepath = dataset_filepath
 
     def format(self):
-        dataset_filepath = get_dataset_filepath(self.dataset_name, self.source)
-
-        loaded_df = pd.read_csv(dataset_filepath)
+        loaded_df = pd.read_csv(self.dataset_filepath)
         loaded_df['labels'] = loaded_df['labels'].apply(ast.literal_eval)
 
         loaded_df = loaded_df.apply(self._format_row, axis=1)
@@ -33,7 +29,8 @@ class Formatter:
 
 class OpenR1CodeforcesFormatter(Formatter):
     def __init__(self):
-        super().__init__("open-r1/codeforces", "huggingface")
+        dataset_filepath = get_dataset_filepath(f"huggingface/open-r1_codeforces.csv")
+        super().__init__(dataset_filepath)
 
     def _format_row(self, row):
         labels = convert_codeforces_labels(row['labels'])
@@ -70,7 +67,8 @@ class OpenR1CodeforcesFormatter(Formatter):
 
 class KaysssLeetcodeFormatter(Formatter):
     def __init__(self):
-        super().__init__("kaysss/leetcode-problem-detailed", "huggingface")
+        dataset_filepath = get_dataset_filepath(f"huggingface/kaysss_leetcode-problem-detailed.csv")
+        super().__init__(dataset_filepath)
 
     def _format_row(self, row):
         labels = convert_leetcode_labels(row['labels'])
@@ -106,7 +104,7 @@ class KaysssLeetcodeFormatter(Formatter):
 # TODO:
 class SpojFormatter(Formatter):
     def __init__(self):
-        super().__init__("kaysss/leetcode-problem-detailed", "scrapper")
+        super().__init__("scrapper/spoj.json")
 
     def _format_row(self, row):
         pass
@@ -114,18 +112,3 @@ class SpojFormatter(Formatter):
     def _get_description(self, row):
         pass
 
-
-codeforcesFormatter = OpenR1CodeforcesFormatter()
-leetcodeFormatter = KaysssLeetcodeFormatter()
-
-dataset_df = pd.concat([
-    codeforcesFormatter.format(),
-    leetcodeFormatter.format()
-])
-
-dataset_filepath = get_dataset_filepath('problems', source="huggingface")
-
-if os.path.exists(dataset_filepath):
-    os.remove(dataset_filepath)
-
-dataset_df.to_csv(dataset_filepath, index=False)

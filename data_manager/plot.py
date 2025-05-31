@@ -125,8 +125,8 @@ def plot_labels_count_per_problem():
 
     plot_for_df(df)
 
-
-plot_problems_count_per_source()
-plot_problems_count_per_label()
-plot_problems_per_description_length()
-plot_labels_count_per_problem()
+def plot_figures():
+    plot_problems_count_per_source()
+    plot_problems_count_per_label()
+    plot_problems_per_description_length()
+    plot_labels_count_per_problem()

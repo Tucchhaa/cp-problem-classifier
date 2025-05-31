@@ -5,23 +5,23 @@ import math
 import re
 import shutil
 from dataclasses import asdict
-
-from http.client import responses
 import requests
-import pandas as pd
-from scrapper_types import ProblemPreview, Problem
 from bs4 import BeautifulSoup
+
+from data_manager.utils import get_dataset_filepath
+from data_manager.spoj_scrapper.scrapper_types import ProblemPreview, Problem
 
 # get this number manually from SPOJ website
 SPOJ_PAGES_COUNT = 80
 
 BASE_URL = 'https://www.spoj.com'
 PAGE_URL = f'{BASE_URL}/problems/classical'
-PROBLEM_BASE_URL = f'{BASE_URL}/problems'
+# PROBLEM_BASE_URL = f'{BASE_URL}/problems'
 
-PROBLEMS_PREVIEW_FILE = "./problems_preview.json"
-PROBLEMS_FILE = "./problems.json"
-DATASET_FILE = "../dataset/scrapper/spoj.json"
+absolute_path = os.path.dirname(os.path.abspath(__file__))
+PROBLEMS_PREVIEW_FILE = f"{absolute_path}/problems_preview.json"
+PROBLEMS_FILE = f"{absolute_path}/problems.json"
+DATASET_FILE = get_dataset_filepath("scrapper/spoj.json")
 
 PROBLEMS_PER_PAGE = 50
 
@@ -127,20 +127,20 @@ class Scrapper:
             problem = ProblemPreview()
             cells = tr.find_all('td')
 
-            problem.id = _get_text(cells[0])
-            problem.title = _get_text(cells[1])
-            problem.url = PROBLEM_BASE_URL + cells[1].find('a')['href']
+            problem.id = self._get_text(cells[0])
+            problem.title = self._get_text(cells[1])
+            problem.url = cells[1].find('a')['href']
 
             quality_span = cells[2].find('span')
 
             if quality_span:
                 quality_text = cells[2].find('span')['title']
-                problem.quality = _get_text(cells[2].find('span'))
+                problem.quality = self._get_text(cells[2].find('span'))
                 problem.thumbs_up = quality_text.split(' ')[0][1:]
                 problem.thumbs_down = quality_text.split(' ')[1][1:]
 
-            problem.user_count = _get_text(cells[3])
-            problem.acceptance_rate = _get_text(cells[4])
+            problem.user_count = self._get_text(cells[3])
+            problem.acceptance_rate = self._get_text(cells[4])
 
             problems.append(problem)
 
@@ -156,7 +156,7 @@ class Scrapper:
         problem.quality = problem_preview.quality
         problem.thumbs_up = problem_preview.thumbs_up
         problem.thumbs_down = problem_preview.thumbs_down
-        problem.user_count = problem_preview.user1_count
+        problem.user_count = problem_preview.user_count
         problem.acceptance_rate = problem_preview.acceptance_rate
 
         # parse tags
@@ -258,7 +258,3 @@ class Scrapper:
             with open(PROBLEMS_FILE, "r") as f:
                 serializable_problems = json.load(f)
                 self.problems = [Problem(**data) for data in serializable_problems]
-
-
-scrapper = Scrapper()
-scrapper.start()

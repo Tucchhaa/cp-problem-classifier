@@ -1,3 +1,5 @@
 **/.idea
 **/*.csv
-data_manager/spoj_scrapper/*.json
+**/.vscode
+**/__pycache__
+
