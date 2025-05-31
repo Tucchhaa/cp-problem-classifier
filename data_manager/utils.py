@@ -1,6 +1,6 @@
 import os
 
-from data_manager.problem_types import codeforces_to_standard, leetcode_to_standard
+from data_manager.problem_types import codeforces_to_standard, leetcode_to_standard, spoj_to_standard
 from typing import List, Literal
 
 Source = Literal["huggingface", "scrapper", ""]
@@ -34,3 +34,6 @@ def convert_codeforces_labels(labels: List[str]) -> List[str]:
 
 def convert_leetcode_labels(labels: List[str]) -> List[str]:
     return _convert_labels(labels, leetcode_to_standard)
+
+def convert_spoj_labels(labels: List[str]) -> List[str]:
+    return _convert_labels(labels, spoj_to_standard)

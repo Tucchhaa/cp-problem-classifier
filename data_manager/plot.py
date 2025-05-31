@@ -5,13 +5,6 @@ import ast
 
 FIGURES_DIR_NAME = "figures"
 
-df = pd.read_csv('./dataset/problems.csv')
-df["description_length"] = df["description"].astype(str).apply(len)
-df["labels"] = df["labels"].apply(ast.literal_eval)
-df["label_count"] = df["labels"].apply(len)
-
-sources = df["source"].unique()
-
 def save_plot(plot_name):
     file_name = f"{plot_name}.png"
     file_path = f"./{FIGURES_DIR_NAME}/{file_name}"
@@ -22,7 +15,7 @@ def save_plot(plot_name):
 
     plt.close()
 
-def plot_problems_count_per_source():
+def plot_problems_count_per_source(df, sources):
     plt.figure(figsize=(8, 6))
 
     source_counts = df['source'].value_counts()
@@ -46,7 +39,7 @@ def plot_problems_count_per_source():
 
     save_plot("problems_count_per_source")
 
-def plot_problems_per_description_length():
+def plot_problems_per_description_length(df, sources):
     def plot_for_df(source_df, source = None):
         if source is None:
             title = "Total Description Length Distribution"
@@ -69,7 +62,7 @@ def plot_problems_per_description_length():
 
     plot_for_df(df)
 
-def plot_problems_count_per_label():
+def plot_problems_count_per_label(df, sources):
     def plot_for_df(source_df, source = None):
         if source is None:
             title = "Total Label Distribution"
@@ -98,7 +91,7 @@ def plot_problems_count_per_label():
 
     plot_for_df(exploded_df)
 
-def plot_labels_count_per_problem():
+def plot_labels_count_per_problem(df, sources):
     def plot_for_df(source_df, source = None):
         if source is None:
             title = "Total Label Count Distribution"
@@ -126,7 +119,14 @@ def plot_labels_count_per_problem():
     plot_for_df(df)
 
 def plot_figures():
-    plot_problems_count_per_source()
-    plot_problems_count_per_label()
-    plot_problems_per_description_length()
-    plot_labels_count_per_problem()
+    df = pd.read_csv('./dataset/problems.csv')
+    df["description_length"] = df["description"].astype(str).apply(len)
+    df["labels"] = df["labels"].apply(ast.literal_eval)
+    df["label_count"] = df["labels"].apply(len)
+
+    sources = df["source"].unique()
+
+    plot_problems_count_per_source(df, sources)
+    plot_problems_count_per_label(df, sources)
+    plot_problems_per_description_length(df, sources)
+    plot_labels_count_per_problem(df, sources)

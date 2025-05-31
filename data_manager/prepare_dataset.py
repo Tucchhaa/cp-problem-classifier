@@ -34,7 +34,7 @@ spojFormatter = SpojFormatter()
 problems_df = pd.concat([
     codeforcesFormatter.format(),
     leetcodeFormatter.format(),
-    # spojFormatter.format()
+    spojFormatter.format()
 ])
 
 dataset_filepath = get_dataset_filepath('problems.csv')
