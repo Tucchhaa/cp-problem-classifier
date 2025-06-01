@@ -8,8 +8,8 @@ import ast
 
 from utils import get_dataset_filepath, convert_codeforces_labels, convert_leetcode_labels, convert_spoj_labels
 
-MAX_PROBLEM_DESCRIPTION_LENGTH = 6000
-MAX_LABELS_COUNT = 7
+MAX_PROBLEM_DESCRIPTION_LENGTH = 5000
+MAX_LABELS_COUNT = 5
 
 class Formatter:
     def __init__(self, dataset_filepath):
