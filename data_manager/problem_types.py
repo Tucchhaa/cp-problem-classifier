@@ -4,7 +4,7 @@
 
 from dataclasses import dataclass
 from typing import List, Optional, Literal, Any, Dict
-from spoj_scrapper.scrapper_types import Problem as SPOJScrapperProblem
+from data_manager.spoj_scrapper.scrapper_types import Problem as SPOJScrapperProblem
 
 
 @dataclass

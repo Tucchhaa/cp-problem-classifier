@@ -4,3 +4,4 @@ datasets>=3.5.1
 matplotlib
 beautifulsoup4
 requests
+scikit-learn
