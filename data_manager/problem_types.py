@@ -272,7 +272,7 @@ class Problem:
 # | skip                              |                                  | meet-in-the-middle        |
 # | skip                              |                                  | schedules                 |
 # | binary search                     |                                  | ternary search            |
-# | remove                            |                                  | *special                   |
+# | remove                            |                                  | *special                  |
 # +------------------------+----------------------------------+--------------------------------------+
 #
 

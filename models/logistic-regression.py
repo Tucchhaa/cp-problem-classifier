@@ -40,7 +40,6 @@ clf = OneVsRestClassifier(LogisticRegression(
     class_weight='balanced',
     C=3.0
 ))
-# clf = OneVsRestClassifier(LinearSVC(class_weight='balanced'))
 
 clf.fit(X_train, y_train)
 
@@ -59,39 +58,3 @@ def predict_labels(description: str, threshold: float = 0.5):
     proba = clf.predict_proba(X_new)[0]
     idx   = (proba >= threshold)
     return mlb.classes_[idx].tolist()
-
-
-# Micro-averaged F1 : 0.5292
-# Macro-averaged F1 : 0.5048
-# Hamming Loss: 0.1024
-#
-# Per-label report:
-#                      precision    recall  f1-score   support
-#
-#       binary search       0.31      0.42      0.36       294
-#    bit manipulation       0.39      0.40      0.40       143
-#       combinatorics       0.51      0.59      0.55       142
-#     data structures       0.50      0.62      0.56       519
-#  divide and conquer       0.13      0.12      0.12        60
-# dynamic programming       0.39      0.47      0.43       516
-#         game theory       0.55      0.80      0.65        51
-#            geometry       0.47      0.75      0.58        85
-#              graphs       0.62      0.67      0.64       429
-#              greedy       0.54      0.63      0.58       638
-#             hashing       0.18      0.14      0.16        50
-#         interactive       0.98      0.94      0.96        49
-#                math       0.58      0.65      0.61       687
-#            matrices       0.68      0.68      0.68        78
-#       number theory       0.55      0.58      0.56       168
-#       probabilities       0.60      0.69      0.64        48
-#       shortest path       0.32      0.46      0.38        69
-#             sorting       0.33      0.46      0.39       299
-#             strings       0.74      0.80      0.77       279
-#               trees       0.65      0.70      0.68       235
-#        two pointers       0.15      0.22      0.18       140
-#          union find       0.20      0.31      0.25        70
-#
-#           micro avg       0.49      0.58      0.53      5049
-#           macro avg       0.47      0.55      0.50      5049
-#        weighted avg       0.50      0.58      0.53      5049
-#         samples avg       0.49      0.60      0.50      5049

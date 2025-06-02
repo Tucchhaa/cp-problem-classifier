@@ -5,3 +5,7 @@ matplotlib
 beautifulsoup4
 requests
 scikit-learn
+transformers
+torch
+evaluate
+accelerate
